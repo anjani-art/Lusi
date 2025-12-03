@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lusi Tech Processor - DSS PWA</title>
+    
+    <!-- Konfigurasi PWA: Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4CAF50">
+    
+    <!-- Ikon Aplikasi (Seperti yang diminta) -->
+    <!-- 1. Favicon untuk browser tab (ukuran kecil) -->
+    <link rel="icon" type="image/png" href="favicon.png"> 
+    
+    <!-- 2. Apple Touch Icon untuk iOS Home Screen (biasanya 180x180) -->
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    
+    <!-- Gaya CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="header-title">Lusi Tech Processor</div>
+            <div class="header-subtitle">Decision Support System & Process Simulation</div>
+        </header>
+
+        <main id="app-content">
+            <!-- Konten Langkah Pohon Keputusan dimuat oleh app.js -->
+        </main>
+
+        <!-- Container Simulator -->
+        <div id="simulator-container" class="simulator-standby">
+            <p>Simulator Standby</p>
+            <p>Selesaikan pohon keputusan di sebelah kiri untuk memilih alat dan proses yang akan dijalankan.</p>
+        </div>
+    </div>
+
+    <!-- Logika Aplikasi -->
+    <script src="app.js"></script>
+    <!-- Registrasi Service Worker -->
+    <script>
+        // Memastikan service worker terdaftar hanya setelah halaman dimuat
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker terdaftar dengan scope:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('Registrasi Service Worker gagal:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
+
