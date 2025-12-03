@@ -1,39 +1,47 @@
+/* --- Google Fonts (Untuk gaya Postmodern Gamer/Retro) --- */
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Orbitron:wght@400;700&display=swap');
+
 /* Gaya Dasar dan Reset */
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: #121212; /* Latar belakang gelap */
-    color: #e0e0e0; /* Teks terang */
+    /* Menggunakan font retro/monospace yang kuat */
+    font-family: 'VT323', monospace; 
+    background-color: #0d0d0d; /* Latar belakang sangat gelap (Deep Space) */
+    color: #00ff00; /* Teks Neon Hijau (Gaya Terminal/Matrix) */
     margin: 0;
     padding: 10px;
     min-height: 100vh;
 }
 
 .container {
-    width: 95%; /* Lebih responsif untuk mobile */
+    width: 95%; 
     max-width: 800px;
     margin: 0 auto;
-    background-color: #1e1e1e;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+    background-color: #1a1a1a;
+    padding: 25px;
+    border-radius: 4px; /* Kotak-kotak tegas, bukan bulat */
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.4); /* Neon glow */
+    border: 1px solid #00ff00;
 }
 
 /* Header */
 header {
     text-align: center;
     margin-bottom: 25px;
-    border-bottom: 1px solid #333;
+    border-bottom: 2px solid #00ff00;
     padding-bottom: 15px;
 }
 
 .header-title {
-    font-size: 1.8em;
+    /* Font futuristik untuk judul */
+    font-family: 'Orbitron', sans-serif; 
+    font-size: 2.2em;
     font-weight: 700;
-    color: #4CAF50; /* Warna hijau khas */
+    color: #ff00ff; /* Neon Pink/Magenta */
+    text-shadow: 0 0 8px rgba(255, 0, 255, 0.7);
 }
 .header-subtitle {
-    font-size: 0.9em;
-    color: #a0a0a0;
+    font-size: 1em;
+    color: #00ffff; /* Neon Cyan */
 }
 
 /* Langkah (Decision Steps) */
@@ -41,15 +49,39 @@ header {
     background-color: #2a2a2a;
     padding: 15px;
     margin-bottom: 20px;
-    border-radius: 8px;
+    border-radius: 4px;
+    border: 1px dashed #00ff00;
+    position: relative;
+}
+
+/* --- Tombol Kembali ke Awal --- */
+.back-to-home-btn {
+    display: inline-block;
+    padding: 8px 15px;
+    margin-bottom: 15px;
+    border: 2px solid #ff00ff;
+    border-radius: 4px;
+    background-color: #1a1a1a;
+    color: #ff00ff;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.1s, color 0.1s, box-shadow 0.1s;
+    text-shadow: none;
+}
+
+.back-to-home-btn:hover {
+    background-color: #ff00ff;
+    color: #121212;
+    box-shadow: 0 0 10px #ff00ff;
 }
 
 .step-title {
-    font-size: 1.2em;
+    font-size: 1.4em;
     font-weight: 600;
     margin-bottom: 15px;
-    color: #BB86FC; /* Warna ungu */
-    border-bottom: 2px solid #4CAF50;
+    color: #00ff00; /* Neon Hijau */
+    border-bottom: 1px solid #333;
     padding-bottom: 5px;
 }
 
@@ -59,25 +91,29 @@ header {
     width: 100%;
     padding: 12px;
     margin-bottom: 8px;
-    border: none;
-    border-radius: 6px;
+    border: 1px solid #00ffff;
+    border-radius: 4px;
     text-align: left;
     background-color: #3a3a3a;
-    color: #e0e0e0;
+    color: #00ff00;
     cursor: pointer;
-    transition: background-color 0.3s, border 0.3s;
-    font-weight: 500;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    font-size: 1.1em;
+    text-shadow: 0 0 2px #00ff00;
 }
 
 .choice-button:hover:not(.selected), .dose-btn:hover:not(.selected) {
     background-color: #444;
+    box-shadow: 0 0 5px #00ffff;
 }
 
 .choice-button.selected {
-    background-color: #4CAF50;
-    color: #121212;
+    background-color: #00ff00; /* Latar hijau terang */
+    color: #121212; /* Teks gelap di atasnya */
     font-weight: bold;
-    border: 2px solid #BB86FC;
+    border: 2px solid #ff00ff;
+    box-shadow: 0 0 10px #00ff00;
+    text-shadow: none;
 }
 
 /* Rekomendasi & Simulator Standby */
@@ -85,13 +121,13 @@ header {
     text-align: center;
     padding: 40px;
     margin-top: 30px;
-    border: 2px dashed #4CAF50;
-    border-radius: 8px;
-    background-color: #2a2a2a;
-    color: #aaa;
+    border: 3px double #00ffff;
+    border-radius: 4px;
+    background-color: #1a1a1a;
+    color: #00ffff;
 }
 #simulator-container {
-    min-height: 300px; /* Tinggi minimal untuk mencegah CLS */
+    min-height: 300px;
 }
 
 /* --- Gaya Kontrol Dosis Asam (Leaching/Extraction) --- */
@@ -100,7 +136,8 @@ header {
     margin: 20px 0;
     padding: 15px;
     background-color: #333;
-    border-radius: 6px;
+    border-radius: 4px;
+    border: 1px solid #ff00ff;
 }
 
 .dose-buttons {
@@ -113,24 +150,31 @@ header {
 .dose-btn {
     width: auto;
     padding: 8px 15px;
-    font-size: 0.9em;
+    font-size: 1em;
+    border: 1px solid #00ffff;
 }
 
 .dose-btn:nth-child(1) { /* Rendah */
-    background-color: #f4d03f;
-    color: #121212;
+    background-color: #550000;
+    color: #ff5555;
+    border-color: #ff5555;
 }
 .dose-btn:nth-child(2) { /* Optimal */
-    background-color: #4CAF50;
-    color: #fff;
+    background-color: #005500;
+    color: #00ff00;
+    border-color: #00ff00;
 }
 .dose-btn:nth-child(3) { /* Overdosis */
-    background-color: #e74c3c;
-    color: #fff;
+    background-color: #555500;
+    color: #ffff00;
+    border-color: #ffff00;
 }
 
 .dose-btn.selected {
-    box-shadow: 0 0 0 3px #BB86FC, 0 0 0 5px #121212; 
+    box-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff; 
+    color: #121212;
+    background-color: #ff00ff;
+    text-shadow: none;
 }
 
 /* Gaya Visualizer (Simulasi Konten Cair) */
@@ -139,14 +183,15 @@ header {
     max-width: 250px;
     height: 250px;
     margin: 20px auto;
-    border: 3px solid #666;
-    border-radius: 10px;
+    border: 3px solid #00ffff;
+    border-radius: 4px;
     overflow: hidden;
     position: relative;
+    box-shadow: 0 0 10px #00ffff;
 }
 
 .visualizer-leaching::before {
-    content: 'Larutan Asam';
+    content: 'STATUS REAKSI';
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -156,25 +201,25 @@ header {
     justify-content: center;
     color: #000;
     font-weight: bold;
-    transition: background-color 0.8s, height 0.8s; /* Transisi halus */
+    transition: background-color 0.8s, height 0.8s;
 }
 
 .visualizer-leaching.low-dose::before {
     height: 30%;
-    background-color: #c0392b; /* Merah gelap */
-    content: '30% Ekstraksi (Yield Rendah)';
+    background-color: #ff5555; 
+    content: '30% EXTRACTION (LOW)';
 }
 
 .visualizer-leaching.optimal-dose::before {
     height: 70%;
-    background-color: #2ecc71; /* Hijau cerah */
-    content: '70% Ekstraksi (Optimal)';
+    background-color: #00ff00; 
+    content: '70% EXTRACTION (OPTIMAL)';
 }
 
 .visualizer-leaching.over-dose::before {
     height: 90%;
-    background-color: #f39c12; /* Jingga (Kontaminasi) */
-    content: '90% Ekstraksi (Overdosis & Pengotor)';
+    background-color: #ffff00; 
+    content: '90% EXTRACTION (WARNING)';
 }
 
 /* --- Gaya Kontrol Sintering/Pembakaran --- */
@@ -183,15 +228,15 @@ header {
     max-width: 250px;
     height: 250px;
     margin: 20px auto;
-    border: 3px solid #666;
-    border-radius: 10px;
+    border: 3px solid #ff00ff;
+    border-radius: 4px;
     background-color: #333;
     position: relative;
     overflow: hidden;
 }
 
 .visualizer-sintering::before {
-    content: 'Sampel Lumpur';
+    content: 'SLUDGE SAMPLE';
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -201,57 +246,49 @@ header {
     justify-content: center;
     color: #121212;
     font-weight: bold;
-    transition: background-color 1s, box-shadow 1s; /* Transisi halus */
-    box-shadow: inset 0 0 50px rgba(255, 255, 0, 0); /* Awalnya tidak ada glow */
+    transition: background-color 1s, box-shadow 1s;
+    box-shadow: inset 0 0 50px rgba(255, 255, 0, 0); 
 }
 
 /* Status Sintering/Pembakaran */
 .visualizer-sintering.idle::before {
-    background-color: #666; /* Abu-abu */
-    content: '572°C - IDLE';
+    background-color: #666; 
+    content: 'IDLE (COLD)';
 }
 
 .visualizer-sintering.processing::before {
-    background-color: #e67e22; /* Jingga/Optimal */
-    content: '878°C - PROCESSING';
-    box-shadow: inset 0 0 50px rgba(255, 165, 0, 0.7); /* Glow oranye */
+    background-color: #ffaa00; /* Oranye */
+    color: #121212;
+    content: 'PROCESSING (OPTIMAL)';
+    box-shadow: inset 0 0 50px rgba(255, 165, 0, 0.7); 
 }
 
 .visualizer-sintering.overheat::before {
-    background-color: #f1c40f; /* Kuning/Terlalu panas */
-    content: '1114°C - OVERHEAT';
-    box-shadow: inset 0 0 70px rgba(255, 255, 0, 0.9); /* Glow kuning intens */
+    background-color: #ff0000; /* Merah Menyala */
+    color: #ffff00;
+    content: 'OVERHEAT (CRITICAL)';
+    box-shadow: inset 0 0 70px rgba(255, 0, 0, 0.9); 
 }
 
-.temp-slider {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-}
-
-.temp-slider input[type="range"] {
-    width: 70%;
-    /* Styling dasar slider */
-}
 
 .product-image {
     text-align: center;
     margin-top: 15px;
-    color: #666;
-    border: 1px dashed #444;
+    color: #00ffff;
+    border: 1px dashed #00ffff;
     padding: 10px;
-    border-radius: 6px;
+    border-radius: 4px;
 }
 
 .warning-text {
     margin-top: 10px;
     font-style: italic;
-    color: #e0e0e0;
+    color: #00ff00;
 }
 .warning-text.critical {
-    color: #e74c3c;
+    color: #ff00ff;
     font-weight: bold;
+    text-shadow: 0 0 5px #ff00ff;
 }
 /* Responsif untuk dosis buttons */
 @media (max-width: 600px) {
@@ -262,4 +299,3 @@ header {
         width: 100%;
     }
 }
-
