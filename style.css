@@ -1,0 +1,265 @@
+/* Gaya Dasar dan Reset */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #121212; /* Latar belakang gelap */
+    color: #e0e0e0; /* Teks terang */
+    margin: 0;
+    padding: 10px;
+    min-height: 100vh;
+}
+
+.container {
+    width: 95%; /* Lebih responsif untuk mobile */
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 15px;
+}
+
+.header-title {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: #4CAF50; /* Warna hijau khas */
+}
+.header-subtitle {
+    font-size: 0.9em;
+    color: #a0a0a0;
+}
+
+/* Langkah (Decision Steps) */
+.step-card {
+    background-color: #2a2a2a;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.step-title {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #BB86FC; /* Warna ungu */
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 5px;
+}
+
+/* Tombol Pilihan */
+.choice-button, .dose-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 8px;
+    border: none;
+    border-radius: 6px;
+    text-align: left;
+    background-color: #3a3a3a;
+    color: #e0e0e0;
+    cursor: pointer;
+    transition: background-color 0.3s, border 0.3s;
+    font-weight: 500;
+}
+
+.choice-button:hover:not(.selected), .dose-btn:hover:not(.selected) {
+    background-color: #444;
+}
+
+.choice-button.selected {
+    background-color: #4CAF50;
+    color: #121212;
+    font-weight: bold;
+    border: 2px solid #BB86FC;
+}
+
+/* Rekomendasi & Simulator Standby */
+.simulator-standby {
+    text-align: center;
+    padding: 40px;
+    margin-top: 30px;
+    border: 2px dashed #4CAF50;
+    border-radius: 8px;
+    background-color: #2a2a2a;
+    color: #aaa;
+}
+#simulator-container {
+    min-height: 300px; /* Tinggi minimal untuk mencegah CLS */
+}
+
+/* --- Gaya Kontrol Dosis Asam (Leaching/Extraction) --- */
+.dose-control {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #333;
+    border-radius: 6px;
+}
+
+.dose-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.dose-btn {
+    width: auto;
+    padding: 8px 15px;
+    font-size: 0.9em;
+}
+
+.dose-btn:nth-child(1) { /* Rendah */
+    background-color: #f4d03f;
+    color: #121212;
+}
+.dose-btn:nth-child(2) { /* Optimal */
+    background-color: #4CAF50;
+    color: #fff;
+}
+.dose-btn:nth-child(3) { /* Overdosis */
+    background-color: #e74c3c;
+    color: #fff;
+}
+
+.dose-btn.selected {
+    box-shadow: 0 0 0 3px #BB86FC, 0 0 0 5px #121212; 
+}
+
+/* Gaya Visualizer (Simulasi Konten Cair) */
+.visualizer-leaching {
+    width: 90%;
+    max-width: 250px;
+    height: 250px;
+    margin: 20px auto;
+    border: 3px solid #666;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.visualizer-leaching::before {
+    content: 'Larutan Asam';
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-weight: bold;
+    transition: background-color 0.8s, height 0.8s; /* Transisi halus */
+}
+
+.visualizer-leaching.low-dose::before {
+    height: 30%;
+    background-color: #c0392b; /* Merah gelap */
+    content: '30% Ekstraksi (Yield Rendah)';
+}
+
+.visualizer-leaching.optimal-dose::before {
+    height: 70%;
+    background-color: #2ecc71; /* Hijau cerah */
+    content: '70% Ekstraksi (Optimal)';
+}
+
+.visualizer-leaching.over-dose::before {
+    height: 90%;
+    background-color: #f39c12; /* Jingga (Kontaminasi) */
+    content: '90% Ekstraksi (Overdosis & Pengotor)';
+}
+
+/* --- Gaya Kontrol Sintering/Pembakaran --- */
+.visualizer-sintering {
+    width: 90%;
+    max-width: 250px;
+    height: 250px;
+    margin: 20px auto;
+    border: 3px solid #666;
+    border-radius: 10px;
+    background-color: #333;
+    position: relative;
+    overflow: hidden;
+}
+
+.visualizer-sintering::before {
+    content: 'Sampel Lumpur';
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #121212;
+    font-weight: bold;
+    transition: background-color 1s, box-shadow 1s; /* Transisi halus */
+    box-shadow: inset 0 0 50px rgba(255, 255, 0, 0); /* Awalnya tidak ada glow */
+}
+
+/* Status Sintering/Pembakaran */
+.visualizer-sintering.idle::before {
+    background-color: #666; /* Abu-abu */
+    content: '572°C - IDLE';
+}
+
+.visualizer-sintering.processing::before {
+    background-color: #e67e22; /* Jingga/Optimal */
+    content: '878°C - PROCESSING';
+    box-shadow: inset 0 0 50px rgba(255, 165, 0, 0.7); /* Glow oranye */
+}
+
+.visualizer-sintering.overheat::before {
+    background-color: #f1c40f; /* Kuning/Terlalu panas */
+    content: '1114°C - OVERHEAT';
+    box-shadow: inset 0 0 70px rgba(255, 255, 0, 0.9); /* Glow kuning intens */
+}
+
+.temp-slider {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.temp-slider input[type="range"] {
+    width: 70%;
+    /* Styling dasar slider */
+}
+
+.product-image {
+    text-align: center;
+    margin-top: 15px;
+    color: #666;
+    border: 1px dashed #444;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.warning-text {
+    margin-top: 10px;
+    font-style: italic;
+    color: #e0e0e0;
+}
+.warning-text.critical {
+    color: #e74c3c;
+    font-weight: bold;
+}
+/* Responsif untuk dosis buttons */
+@media (max-width: 600px) {
+    .dose-buttons {
+        flex-direction: column;
+    }
+    .dose-btn {
+        width: 100%;
+    }
+}
+
