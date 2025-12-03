@@ -102,6 +102,15 @@ let currentStep = 'step1';
 const appContent = document.getElementById('app-content');
 const simulatorContainer = document.getElementById('simulator-container');
 
+// HTML untuk tombol kembali, digunakan di berbagai fungsi
+const BACK_BUTTON_HTML = `<button class="back-to-home-btn" onclick="goBackToStep1()">X KELUAR SIMULASI</button>`;
+
+// Fungsi baru untuk kembali ke Langkah 1
+function goBackToStep1() {
+    currentStep = 'step1';
+    renderStep('step1');
+}
+
 // Fungsi untuk merender tampilan langkah saat ini
 function renderStep(stepKey) {
     const stepData = decisionTree[stepKey];
@@ -110,18 +119,28 @@ function renderStep(stepKey) {
     // Reset konten dan status simulator
     appContent.innerHTML = '';
     simulatorContainer.innerHTML = `
+        <div class="header-subtitle">Status: RUNNING</div>
         <p>Simulator Standby</p>
-        <p>Selesaikan pohon keputusan di sebelah kiri untuk memilih alat dan proses yang akan dijalankan.</p>
+        <p class="warning-text">Selesaikan pohon keputusan di sebelah kiri untuk memilih alat dan proses yang akan dijalankan.</p>
     `;
     simulatorContainer.className = 'simulator-standby';
 
     // Buat card langkah
     const stepCard = document.createElement('div');
     stepCard.className = 'step-card';
-    stepCard.innerHTML = `
+    
+    // Header Langkah
+    let stepContent = `
         <div class="step-title">${stepData.title}</div>
         <p>${stepData.question}</p>
     `;
+
+    // Tambahkan tombol kembali jika bukan Langkah 1
+    if (stepKey !== 'step1') {
+        stepContent = BACK_BUTTON_HTML + stepContent;
+    }
+
+    stepCard.innerHTML = stepContent;
 
     // Tambahkan tombol-tombol pilihan
     for (const key in stepData.choices) {
@@ -149,7 +168,7 @@ function renderStep(stepKey) {
     appContent.appendChild(stepCard);
 }
 
-// Fungsi untuk menangani klik pilihan
+// Fungsi untuk menangani klik pilihan (Tidak berubah)
 function handleChoice(currentStepKey, choiceKey, choiceData) {
     // Jika ada langkah berikutnya, render langkah itu
     if (choiceData.next) {
@@ -166,19 +185,20 @@ function handleChoice(currentStepKey, choiceKey, choiceData) {
     }
 }
 
-// Fungsi untuk menampilkan rekomendasi dan tombol simulator
+// Fungsi untuk menampilkan rekomendasi dan tombol simulator (Tombol Kembali Ditambahkan)
 function displayRecommendation(reco) {
     simulatorContainer.innerHTML = `
+        ${BACK_BUTTON_HTML}
         <div class="step-title">REKOMENDASI METODE</div>
         <h3>${reco.method}</h3>
         <p>${reco.description}</p>
-        <button class="choice-button" onclick="runSimulator('${reco.process}', '${reco.temp_range}')">Jalankan Simulasi: ${reco.process.replace(/([A-Z])/g, ' $1').trim()}</button>
+        <button class="choice-button" onclick="runSimulator('${reco.process}', '${reco.temp_range}')">>>> JALANKAN SIMULASI: ${reco.process.replace(/([A-Z])/g, ' $1').trim()} <<<</button>
     `;
     simulatorContainer.className = 'step-card'; 
 }
 
 
-// --- FUNGSI PEMBANTU SIMULASI ---
+// --- FUNGSI PEMBANTU SIMULASI (Tombol Kembali Ditambahkan) ---
 
 // 1. Fungsi untuk simulasi Sintering (Pembakaran: BrickSintering, GeopolymerSintering)
 function renderSinteringControl(processName, selectedTempStatus = 'PROCESSING') {
@@ -189,35 +209,37 @@ function renderSinteringControl(processName, selectedTempStatus = 'PROCESSING') 
     let processTitle = (processName === 'BrickSintering') ? 'SINTERING BATA MERAH' : 'SINTERING GEOPOLIMER';
 
     if (processName === 'BrickSintering') {
-        outputImage = '[Gambar: Bata merah solid yang sudah dibakar]'; 
+        outputImage = '[ASSET: Bata merah solid yang sudah dibakar]'; 
         if (status === 'IDLE') {
             tempValue = '572°C'; 
-            warning = 'Suhu belum cukup. Panaskan hingga >850°C.';
+            warning = 'ERROR: Suhu belum cukup. Panaskan hingga >850°C.';
         } else if (status === 'PROCESSING') {
             tempValue = '878°C'; 
-            warning = 'Suhu Optimal Sintering tercapai. Partikel menyatu menjadi keramik padat.';
+            warning = 'SUCCESS: Suhu Optimal Sintering tercapai. Partikel menyatu menjadi keramik padat.';
         } else if (status === 'OVERHEAT') {
             tempValue = '1114°C'; 
-            warning = 'PERINGATAN: Suhu terlalu tinggi! Material meleleh (Vitrification berlebih). Bata akan gagal.';
+            warning = 'WARNING: Suhu terlalu tinggi! Material meleleh (Vitrification berlebih). Bata akan gagal.';
         }
     } else if (processName === 'GeopolymerSintering') {
-        outputImage = '[Gambar: Keramik Geopolimer padat]'; 
+        outputImage = '[ASSET: Keramik Geopolimer padat]'; 
         if (status === 'IDLE') {
             tempValue = '331°C'; 
-            warning = 'Suhu belum cukup. Panaskan hingga >850°C.';
+            warning = 'ERROR: Suhu belum cukup. Panaskan hingga >850°C.';
         } else if (status === 'PROCESSING') {
             tempValue = '982°C'; 
-            warning = 'Suhu Optimal Sintering tercapai. Partikel menyatu menjadi keramik padat.';
+            warning = 'SUCCESS: Suhu Optimal Sintering tercapai. Partikel menyatu menjadi keramik padat.';
         } else if (status === 'OVERHEAT') {
             tempValue = '1151°C'; 
-            warning = 'PERINGATAN: Suhu terlalu tinggi! Material meleleh (Vitrification berlebih). Produk akan gagal.';
+            warning = 'WARNING: Suhu terlalu tinggi! Material meleleh (Vitrification berlebih). Produk akan gagal.';
         }
     }
 
     // HTML Kontrol Sintering
     const htmlContent = `
+        ${BACK_BUTTON_HTML}
         <div class="step-title">${processTitle}</div>
-        <p>SUHU SAAT INI: ${tempValue} | STATUS: **${status}**</p>
+        <p class="header-subtitle">PARAMETER SAAT INI</p>
+        <p>SUHU: ${tempValue} | STATUS: **${status}**</p>
         
         <div class="visualizer-sintering ${status.toLowerCase()}">
             <!-- Visualisasi Proses Pembakaran (Animasi CSS) -->
@@ -225,21 +247,21 @@ function renderSinteringControl(processName, selectedTempStatus = 'PROCESSING') 
 
         <div class="sintering-control">
             <p class="step-title">KONTROL SUHU PEMBAKARAN</p>
-            <p>Target: 900-1000°C</p>
+            <p class="header-subtitle">Target: 900-1000°C</p>
             <p class="warning-text ${status === 'OVERHEAT' || status === 'IDLE' ? 'critical' : ''}">${warning}</p>
         </div>
 
         <div class="output-product">
-            <p class="step-title">Output Produk</p>
-            <p>Proses Selesai: Struktur lumpur telah berubah menjadi keramik padat yang stabil.</p>
+            <p class="step-title">OUTPUT PRODUK</p>
+            <p class="header-subtitle">Proses Selesai: Struktur lumpur telah berubah menjadi keramik padat yang stabil.</p>
             <div class="product-image">${outputImage}</div>
         </div>
         
         <!-- Tombol untuk mengubah status simulasi (interaktif) -->
         <div class="dose-buttons" style="margin-top: 20px;">
-            <button class="dose-btn" onclick="renderSinteringControl('${processName}', 'IDLE')">572°C (IDLE)</button>
-            <button class="dose-btn" onclick="renderSinteringControl('${processName}', 'PROCESSING')">878°C (OPTIMAL)</button>
-            <button class="dose-btn" onclick="renderSinteringControl('${processName}', 'OVERHEAT')">1114°C (OVERHEAT)</button>
+            <button class="dose-btn ${status === 'IDLE' ? 'selected' : ''}" onclick="renderSinteringControl('${processName}', 'IDLE')">572°C [ERROR]</button>
+            <button class="dose-btn ${status === 'PROCESSING' ? 'selected' : ''}" onclick="renderSinteringControl('${processName}', 'PROCESSING')">878°C [OPTIMAL]</button>
+            <button class="dose-btn ${status === 'OVERHEAT' ? 'selected' : ''}" onclick="renderSinteringControl('${processName}', 'OVERHEAT')">1114°C [CRITICAL]</button>
         </div>
     `;
 
@@ -258,40 +280,42 @@ function renderAcidDoseControl(processName, selectedDose = 'Optimal') {
 
     if (processName === 'LithiumLeaching' || processName === 'REEExtraction') {
         processTitle = (processName === 'LithiumLeaching') ? 'EKSTRAKSI LITHIUM' : 'EKSTRAKSI RARE EARTH';
-        outputImage = '[Gambar: Produk akhir konsentrat logam murni]';
+        outputImage = '[ASSET: Produk akhir konsentrat logam murni]';
         outputDescription = 'Presipitasi berhasil. Endapan adalah konsentrat logam berharga (Lithium Karbonat atau REE).';
 
         if (selectedDose === 'Rendah') {
-            pHWarning = 'Dosis kurang. Reaksi lambat, yield ekstraksi sangat rendah. Sebagian besar logam masih dalam lumpur.';
+            pHWarning = 'ERROR: Dosis kurang. Yield ekstraksi sangat rendah. Logam masih terperangkap.';
             visualClass = 'low-dose';
         } else if (selectedDose === 'Optimal') {
-            pHWarning = 'Dosis Samourous Asam optimal. Melarutkan logam berharga tanpa melarutkan pengotor berlebih.';
+            pHWarning = 'SUCCESS: Dosis Asam optimal. Melarutkan logam berharga, yield tinggi.';
             visualClass = 'optimal-dose';
         } else if (selectedDose === 'Overdosis') {
-            pHWarning = 'pH terlalu rendah! Asam berlebih melarutkan pengotor lain (Silika/Aluminium/Besi), merusak kemurnian produk.';
+            pHWarning = 'WARNING: pH terlalu rendah! Asam berlebih melarutkan pengotor, merusak kemurnian produk.';
             visualClass = 'over-dose';
         }
     } else if (processName === 'SoilAmendment') {
         processTitle = 'SOIL AMENDMENT (MEDIA TANAM)';
-        outputImage = '[Gambar: Tumpukan media tanam subur yang dicampur lumpur]';
+        outputImage = '[ASSET: Tumpukan media tanam subur yang dicampur lumpur]';
         outputDescription = 'Lumpur telah diproses menjadi bahan campuran yang dapat meningkatkan kualitas dan porositas tanah.';
 
         if (selectedDose === 'Rendah') {
-            pHWarning = 'Kontrol Kualitas: Dosis pencampur rendah, produk akhir tidak homogen dan kurang efektif.';
+            pHWarning = 'ERROR: Dosis pencampur rendah, produk akhir tidak homogen dan kurang efektif.';
             visualClass = 'low-dose';
         } else if (selectedDose === 'Optimal') {
-            pHWarning = 'Kontrol Kualitas Optimal. Pencampuran homogen menghasilkan produk media tanam berkualitas tinggi.';
+            pHWarning = 'SUCCESS: Pencampuran homogen menghasilkan produk media tanam berkualitas tinggi.';
             visualClass = 'optimal-dose';
         } else if (selectedDose === 'Overdosis') {
-            pHWarning = 'Kontrol Kualitas: Overdosis bahan pengikat/pengurai menyebabkan pH terlalu ekstrem. Produk tidak aman untuk tanaman.';
+            pHWarning = 'WARNING: Overdosis bahan pengikat/pengurai menyebabkan pH terlalu ekstrem. Produk tidak aman untuk tanaman.';
             visualClass = 'over-dose';
         }
     }
     
     // HTML Kontrol Dosis
     const htmlContent = `
+        ${BACK_BUTTON_HTML}
         <div class="step-title">${processTitle}</div>
-        <p>TEMP: Suhu Lingkungan | STATUS: **REACTION**</p>
+        <p class="header-subtitle">PARAMETER SAAT INI</p>
+        <p>TEMP: SUHU LINGKUNGAN | STATUS: **REACTION**</p>
         
         <div class="visualizer-leaching ${visualClass}">
             <!-- Visualisasi Proses Pelarutan/Pencampuran (Animasi CSS) -->
@@ -300,16 +324,16 @@ function renderAcidDoseControl(processName, selectedDose = 'Optimal') {
         <div class="dose-control">
             <p class="step-title">KONTROL DOSIS PELARUT/BAHAN CAMPURAN</p>
             <div class="dose-buttons">
-                <button class="dose-btn ${selectedDose === 'Rendah' ? 'selected' : ''}" onclick="renderAcidDoseControl('${processName}', 'Rendah')">Dosis Rendah</button>
-                <button class="dose-btn ${selectedDose === 'Optimal' ? 'selected' : ''}" onclick="renderAcidDoseControl('${processName}', 'Optimal')">Dosis Optimal</button>
-                <button class="dose-btn ${selectedDose === 'Overdosis' ? 'selected' : ''}" onclick="renderAcidDoseControl('${processName}', 'Overdosis')">Overdosis</button>
+                <button class="dose-btn ${selectedDose === 'Rendah' ? 'selected' : ''}" onclick="renderAcidDoseControl('${processName}', 'Rendah')">DOSIS RENDAH</button>
+                <button class="dose-btn ${selectedDose === 'Optimal' ? 'selected' : ''}" onclick="renderAcidDoseControl('${processName}', 'Optimal')">DOSIS OPTIMAL</button>
+                <button class="dose-btn ${selectedDose === 'Overdosis' ? 'selected' : ''}" onclick="renderAcidDoseControl('${processName}', 'Overdosis')">OVERDOSIS</button>
             </div>
             <p class="warning-text ${selectedDose !== 'Optimal' ? 'critical' : ''}">${pHWarning}</p>
         </div>
 
         <div class="output-product">
-            <p class="step-title">Output Produk</p>
-            <p>${outputDescription}</p>
+            <p class="step-title">OUTPUT PRODUK</p>
+            <p class="header-subtitle">${outputDescription}</p>
             <div class="product-image">${outputImage}</div>
         </div>
     `;
@@ -322,23 +346,25 @@ function renderAcidDoseControl(processName, selectedDose = 'Optimal') {
 function renderSolidificationControl(processName, selectedMixStatus = 'PROCESSING') {
     let status = selectedMixStatus;
     let warning = '';
-    let outputImage = '[Gambar: Blok solidifikasi padat yang siap ditimbun]'; 
+    let outputImage = '[ASSET: Blok solidifikasi padat yang siap ditimbun]'; 
     let description = 'Limbah terkontaminasi telah diikat secara permanen dalam matriks semen yang padat (solidifikasi).';
     let processTitle = 'SOLIDIFIKASI & LANDFILL AMAN';
 
 
     if (status === 'IDLE') {
-        warning = 'Pencampuran kurang homogen. Risiko logam berat larut ke air tanah masih tinggi.';
+        warning = 'ERROR: Pencampuran kurang homogen. Risiko kebocoran kontaminan masih tinggi.';
     } else if (status === 'PROCESSING') {
-        warning = 'Pencampuran optimal. Kontaminan terikat kuat dalam matriks semen yang stabil.';
+        warning = 'SUCCESS: Pencampuran optimal. Kontaminan terikat kuat dalam matriks semen yang stabil.';
     } else if (status === 'OVERHEAT') {
-        warning = 'Semen terlalu banyak/terlalu cepat mengeras. Terdapat retakan internal yang dapat menyebabkan kebocoran kontaminan.';
+        warning = 'WARNING: Adonan terlalu cepat mengeras. Terdapat retakan internal yang dapat menyebabkan kebocoran kontaminan.';
     }
 
     
     // HTML Kontrol Solidifikasi
     const htmlContent = `
+        ${BACK_BUTTON_HTML}
         <div class="step-title">${processTitle}</div>
+        <p class="header-subtitle">PARAMETER SAAT INI</p>
         <p>TEKANAN: 552 kPa | STATUS: **${status}**</p>
         
         <div class="visualizer-sintering ${status.toLowerCase()}">
@@ -347,21 +373,21 @@ function renderSolidificationControl(processName, selectedMixStatus = 'PROCESSIN
 
         <div class="sintering-control">
             <p class="step-title">KONTROL PENCAMPURAN & PENGUATAN</p>
-            <p>Target: Homogenitas Maksimal</p>
+            <p class="header-subtitle">Target: Homogenitas Maksimal</p>
             <p class="warning-text ${status !== 'PROCESSING' ? 'critical' : ''}">${warning}</p>
         </div>
 
         <div class="output-product">
-            <p class="step-title">Output Produk</p>
-            <p>${description}</p>
+            <p class="step-title">OUTPUT PRODUK</p>
+            <p class="header-subtitle">${description}</p>
             <div class="product-image">${outputImage}</div>
         </div>
         
         <!-- Tombol untuk mengubah status simulasi -->
         <div class="dose-buttons" style="margin-top: 20px;">
-            <button class="dose-btn" onclick="renderSolidificationControl('${processName}', 'IDLE')">IDLE (Kurang Campur)</button>
-            <button class="dose-btn" onclick="renderSolidificationControl('${processName}', 'PROCESSING')">OPTIMAL (Homogen)</button>
-            <button class="dose-btn" onclick="renderSolidificationControl('${processName}', 'OVERHEAT')">OVERHEAT (Retak)</button>
+            <button class="dose-btn ${status === 'IDLE' ? 'selected' : ''}" onclick="renderSolidificationControl('${processName}', 'IDLE')">IDLE [KURANG CAMPUR]</button>
+            <button class="dose-btn ${status === 'PROCESSING' ? 'selected' : ''}" onclick="renderSolidificationControl('${processName}', 'PROCESSING')">OPTIMAL [HOMOGEN]</button>
+            <button class="dose-btn ${status === 'OVERHEAT' ? 'selected' : ''}" onclick="renderSolidificationControl('${processName}', 'OVERHEAT')">OVERHEAT [CRITICAL]</button>
         </div>
     `;
 
@@ -390,4 +416,3 @@ function runSimulator(process, tempRange) {
 document.addEventListener('DOMContentLoaded', () => {
     renderStep('step1');
 });
-
